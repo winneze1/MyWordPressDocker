@@ -1,27 +1,27 @@
 # VIẾT THEO CÚ PHÁP YAML, CHÚ Ý CHÍNH XÁC KHOẢNG TRẮNG ĐẦU CÁC DÒNG
-version: '3'                                 # chọn viết theo bản 3 docs.docker.com/compose/compose-file/
+version: '3'                                 # Chỉ ra phiên bản docker-compose muốn sử dụng
 
 services:                                    # CÁC DỊCH VỤ (CONTAINER) NĂM TRONG services
   # Database
-  db:
-    image: mysql:5.7
+  db:                                        # Tạo dịch vụ database
+    image: mysql:5.7                         # Image tạo ra dịch vụ
     volumes:
-      - db_data:/var/lib/mysql
-    restart: always
-    environment:
+      - db_data:/var/lib/mysql               # thư mục lưu DB
+    restart: always                          # Restart container khi có lỗi
+    environment:                             # Cài đặt biến môi trường theo hướng dẫn
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: wordpress
       MYSQL_USER: wordpress
       MYSQL_PASSWORD: wordpress
-    networks:
+    networks:                                # nối vào mạng my-network (tạo mạng này ở dưới)
       - wpsite
   #phpmyadmin
-  phpmyadmin:
-    depends_on:
+  phpmyadmin:                                # Tạo dịch vụ phpmyadmin
+    depends_on:                              # Chỉ ra sự phụ thuộc. Service db chạy xong thì service này mới được chạy
       - db
     image: phpmyadmin/phpmyadmin
     restart: always
-    ports:
+    ports:                                   # Thiết lập cổng để ánh xạ
       - '8080:80'
     environment:
       PMA_HOST: db
@@ -43,7 +43,7 @@ services:                                    # CÁC DỊCH VỤ (CONTAINER) NĂM
       WORDPRESS_DB_PASSWORD: wordpress
     networks:
       - wpsite
-networks:
+networks:                                     # TẠO NETWORK
   wpsite:
-volumes:
+volumes:                                      # TẠO Ổ Đĩa
   db_data:
